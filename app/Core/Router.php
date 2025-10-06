@@ -1,16 +1,22 @@
 <?php
 require_once __DIR__ . "/../Controllers/UserController.php";
+require_once __DIR__ . "/../Controllers/LoginController.php";
+require_once __DIR__ . "/../Controllers/UploadController.php";
 
 // Classe de controle de rota do sistema MVC
 class Router
 {
   // Atributo privado para o controle de usuário
   private $userController;
+  private $loginController;
+  private $uploadController;
 
   // Método construtor que instância o controller
   public function __construct()
   {
     $this->userController = new UserController();
+    $this->loginController = new LoginController();
+    $this->uploadController = new UploadController();
   }
 
   // Método público que retorna um código com base na rota inserida pelo cliente
@@ -23,20 +29,62 @@ class Router
     $parts = explode("/", trim($uri, "/"));
 
     // Se a primeira parte for "crud", remove ela antes de continuar o código
-    if ($parts[0] == 'maq_api') {
+    if ($parts[0] == 'maq-api') {
       array_shift($parts);
     }
     if ($parts[0] == 'public') {
       array_shift($parts);
     }
 
+    // Obtendo a data do cliente
+    $data = json_decode(file_get_contents("php://input"));
+
+    // AUTENTIFICAÇÃO
+    if ($parts[0] == "auth") {
+      $action = $parts[1] ?? null;
+
+      switch ($method) {
+        case "POST": // Gera o token para o usuário
+          $this->loginController->login($data);
+          break;
+
+        case "GET": // Valida o token e retorna os dados do usuário
+          $this->userController->auth();
+          break;
+        
+        default:
+          http_response_code(405);
+          echo json_encode(["success" => false, "error" => "Método não permitido"]);
+          break;
+      }
+    }
+
+    // ARQUIVOS
+    if ($parts[0] == "upload") {
+      $action = $parts[1] ?? null;
+
+      switch ($method) {
+        case "POST": // Adiciona o arquivo no servidor
+          $this->uploadController->upload_pfp();
+          break;
+        
+        /* case "GET": // Obtém o arquivo do servidor
+          $this->uploadController->get(); */
+
+        default:
+          http_response_code(405);
+          echo json_encode(["success" => false, "error" => "Método não permitido"]);
+          break;
+      }
+    }
+ 
     // CRUD RESTful
     if ($parts[0] === "users") {
       $id = $parts[1] ?? null;  // se tiver ID na rota
 
       switch ($method) {
         case "POST": // Criar usuário
-          $data = json_decode(file_get_contents("php://input"));
+          
           $this->userController->create($data);
           return;
 
@@ -53,7 +101,6 @@ class Router
         case "PUT":
         case "PATCH":
           if ($id) {
-            $data = json_decode(file_get_contents("php://input"));
             $this->userController->update($id, $data);
           } else {
             http_response_code(400);
