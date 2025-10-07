@@ -2,6 +2,7 @@
 require_once __DIR__ . "/../Controllers/UserController.php";
 require_once __DIR__ . "/../Controllers/LoginController.php";
 require_once __DIR__ . "/../Controllers/UploadController.php";
+require_once __DIR__ . "/../Controllers/PostController.php";
 
 // Classe de controle de rota do sistema MVC
 class Router
@@ -10,6 +11,7 @@ class Router
   private $userController;
   private $loginController;
   private $uploadController;
+  private $postController;
 
   // Método construtor que instância o controller
   public function __construct()
@@ -17,6 +19,7 @@ class Router
     $this->userController = new UserController();
     $this->loginController = new LoginController();
     $this->uploadController = new UploadController();
+    $this->postController = new PostController();
   }
 
   // Método público que retorna um código com base na rota inserida pelo cliente
