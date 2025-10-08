@@ -18,7 +18,7 @@ class PostController
     // Retornando todos os Posts
     public function index(){
         $result = $this->postModel->getAllPosts();
-        return JsonView::render([["post" => $result[0], "success" => $result[1]], 200]);
+        return JsonView::render(["post" => $result[0], "success" => $result[1]], 200);
     }
 
     // Retornando um Post pelo ID do Post
@@ -34,7 +34,7 @@ class PostController
     // Retornando os Posts pelo Id do usuário
     public function getByUser($user_id){
         $result = $this->postModel->getPostByUserID($user_id);
-        JsonView::render(["post" => $result[0], "success" => $result[1]], 200);
+        return JsonView::render(["post" => $result[0], "success" => $result[1]], 200);
     }
 
     //POST Methods
@@ -45,9 +45,9 @@ class PostController
         //Garante que o usuário está autenticado e Pega seu ID salvo na sessão
         $user_id = AuthMiddleware::handle();
 
-        //Confere se o post tem menssagem
+        //Confere se o post tem mensagem
         if(!$data->message){
-            return JsonView::render(["error" => "Menssagem Obrigatória", "success" => false], 400);
+            return JsonView::render(["error" => "Mensagem Obrigatória", "success" => false], 400);
         }
 
         // Se Data => post_img existir e não for nula pega ela, caso contrário, pega null;
@@ -55,7 +55,7 @@ class PostController
 
         $result = $this->postModel->createPost($data->message, $user_id, $post_img);
         
-        return JsonView::render([["message" => $result[0], "sucess" => $result[1]], $result[1] ? 201 : 400]);
+        return JsonView::render([["message" => $result[0], "success" => $result[1]], $result[1] ? 201 : 400]);
     }
 
     //DELETE Methods
