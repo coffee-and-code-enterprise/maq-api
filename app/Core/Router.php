@@ -6,12 +6,12 @@ require_once __DIR__ . "/../Controllers/UploadController.php";
 // Classe de controle de rota do sistema MVC
 class Router
 {
-  // Atributo privado para o controle de usuário
+  // Atributos privados para os controllers
   private $userController;
   private $loginController;
   private $uploadController;
 
-  // Método construtor que instância o controller
+  // Método construtor que instância os controllers
   public function __construct()
   {
     $this->userController = new UserController();
@@ -28,7 +28,7 @@ class Router
     // Separa as partes da uri por "/"
     $parts = explode("/", trim($uri, "/"));
 
-    // Se a primeira parte for "crud", remove ela antes de continuar o código
+    // Se a primeira parte for "maq-api/public", remove ela antes de continuar o código
     if ($parts[0] == 'maq-api') {
       array_shift($parts);
     }
@@ -51,7 +51,7 @@ class Router
         case "GET": // Valida o token e retorna os dados do usuário
           $this->userController->auth();
           break;
-        
+
         default:
           http_response_code(405);
           echo json_encode(["success" => false, "error" => "Método não permitido"]);
@@ -67,9 +67,6 @@ class Router
         case "POST": // Adiciona o arquivo no servidor
           $this->uploadController->upload_pfp();
           break;
-        
-        /* case "GET": // Obtém o arquivo do servidor
-          $this->uploadController->get(); */
 
         default:
           http_response_code(405);
@@ -77,14 +74,14 @@ class Router
           break;
       }
     }
- 
+
     // CRUD RESTful
     if ($parts[0] === "users") {
       $id = $parts[1] ?? null;  // se tiver ID na rota
 
       switch ($method) {
         case "POST": // Criar usuário
-          
+
           $this->userController->create($data);
           return;
 
