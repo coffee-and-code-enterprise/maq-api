@@ -18,9 +18,9 @@ class PostModel{
         try{
 
             //Consulta SQL para pegar todos os Posts
-            $sql = "SELECT p.id, p.message, p.post_img, u.username, u.user_image
+            $sql = "SELECT p.id, p.message, p.post_img, p.user_id, u.username, u.user_image
                     FROM posts p
-                    INNER JOIN users u ON p.users_id = u.id
+                    INNER JOIN users u ON p.user_id = u.id
                     ORDER BY u.id DESC";
             
             // Preparando a consulta
@@ -41,9 +41,9 @@ class PostModel{
         try{
 
             //Consulta SQL para pegar todos os Posts
-            $sql = "SELECT p.id, p.message, p.post_img, u.username, u.user_image
+            $sql = "SELECT p.id, p.message, p.post_img, p.user_id, u.username, u.user_image
                     FROM posts p
-                    INNER JOIN users u ON p.users_id = u.id
+                    INNER JOIN users u ON p.user_id = u.id
                     WHERE p.id = :id LIMIT 1";
             
             // Preparando a consulta

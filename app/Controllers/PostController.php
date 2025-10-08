@@ -63,13 +63,13 @@ class PostController
     //Deletar um Post
     public function delete($id){
 
-        //Verifica se o Usuário esta conectado e peg seu ID
+        //Verifica se o Usuário esta conectado e pega seu ID
         $user_id = AuthMiddleware::handle();
 
         //Verifica se o Post existe e é do Usuário antes de Deletar
         $post = $this->postModel->getPostByID($id);
         if(!$post[1]) return JsonView::render(["error" => "Post não encontrado", "success" => false], 404);
-        if($user_id !== $post[0]["user_id"]) return  JsonView::render(["error" => "Acesso Negado", "success" => false], 403);
+        if($user_id !== $post[0]["user_id"]) return JsonView::render(["error" => "Acesso Negado", "success" => false], 403);
 
         $result = $this->postModel->deletePost($id);
         return JsonView::render(["message" => $result[0], "success" => $result[1]], 200);
