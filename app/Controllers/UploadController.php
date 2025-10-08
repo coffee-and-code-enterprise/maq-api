@@ -86,7 +86,7 @@ class UploadController
 
     // Move o arquivo para a pasta do servidor
     if (move_uploaded_file($fileTmp, $targetDir . $safeName)) {
-      $fileUrl = "http://localhost/crud/uploads/user_images/" . $safeName;
+      $fileUrl = "http://localhost/maq-api/public/uploads/user_images/" . $safeName;
 
       // Atualiza a URL da foto no banco
       $data = new stdClass;
