@@ -68,11 +68,11 @@ class PostModel{
     {
         try{
 
-            //Consulta SQL para pegar todos os Posts
-            $sql = "SELECT *
-                    FROM posts
-                    WHERE user_id = :userId
-                    ORDER BY id DESC";
+            //Consulta SQL para pegar todos os Posts do usuário
+            $sql = "SELECT p.id, p.message, p.post_img, p.user_id, u.username, u.user_image
+                    FROM posts p
+                    INNER JOIN users u ON p.user_id = u.id
+                    WHERE p.user_id = :userId";
             
             // Preparando a consulta
             $stmt = $this->db->prepare($sql);

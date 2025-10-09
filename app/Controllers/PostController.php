@@ -50,11 +50,16 @@ class PostController
         // Garante que o usuário está autenticado e Pega seu ID salvo na sessão
         $user_id = AuthMiddleware::handle();
 
-        // O campo 'message' veio do FormData como $_POST['message']
-        $message = $_POST['message'] ?? '';
-
-        // O campo 'image' veio do FormData como $_FILES['image']
-        $file = $_FILES['image'] ?? null;
+        // Suporte tanto para JSON quanto para FormData
+        $contentType = $_SERVER["CONTENT_TYPE"] ?? '';
+        if (stripos($contentType, 'application/json') !== false) {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $message = $input['message'] ?? '';
+            $file = null; // Não há suporte para upload de arquivo via JSON puro
+        } else {
+            $message = $_POST['message'] ?? '';
+            $file = $_FILES['image'] ?? null;
+        }
 
         // Confere se o post tem mensagem
         if (!isset($message) || empty(trim($message))) {
