@@ -134,8 +134,8 @@ class Router
       $user_id = $parts[2] ?? null; // se tiver o User_Id na rota o pega;
 
       switch($method){
-        case "POST": 
-          $this->postController->create($data);
+        case "POST":
+          $this->postController->create();
           return;
       
         case "GET":
