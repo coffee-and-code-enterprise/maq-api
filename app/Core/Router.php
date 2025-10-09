@@ -19,7 +19,7 @@ class Router
     $this->userController = new UserController();
     $this->loginController = new LoginController();
     $this->uploadController = new UploadController();
-    $this->postController = new PostController();
+    $this->postController = new PostController;
   }
 
   // Método público que retorna um código com base na rota inserida pelo cliente
@@ -83,7 +83,8 @@ class Router
  
     // CRUD RESTful
     if ($parts[0] === "users") {
-      $id = $parts[1] ?? null;  // se tiver ID na rota
+      $id = $parts[1] ?? null;  // se tiver ID ou "User" na rota o pega;
+
 
       switch ($method) {
         case "POST": // Criar usuário
@@ -115,6 +116,46 @@ class Router
           if ($id) {
             $this->userController->delete($id);
           } else {
+            http_response_code(400);
+            echo json_encode(["error" => "ID obrigatório para exclusão"]);
+          }
+          return;
+
+        default:
+          http_response_code(405);
+          echo json_encode(["error" => "Método não permitido"]);
+          return;
+      }
+    }
+    
+    //Posts
+    if ($parts[0] === "posts"){
+      $id = $parts[1] ?? null; //Puxa o ID (Se Tiver)
+      $user_id = $parts[2] ?? null; // se tiver o User_Id na rota o pega;
+
+      switch($method){
+        case "POST":
+          $this->postController->create();
+          return;
+      
+        case "GET":
+          if ($id === "user" && $user_id){
+            $this->postController->getByUser($user_id);
+            return;
+          }
+
+          if ($id){
+            $this->postController->show($id);
+            return;
+          }
+
+          $this->postController->index();
+          return;
+
+        case "DELETE":
+          if($id){
+            $this->postController->delete($id);
+          } else{
             http_response_code(400);
             echo json_encode(["error" => "ID obrigatório para exclusão"]);
           }

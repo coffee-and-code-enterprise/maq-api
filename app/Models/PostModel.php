@@ -18,7 +18,7 @@ class PostModel{
         try{
 
             //Consulta SQL para pegar todos os Posts
-            $sql = "SELECT p.id, p.message, p.post_img, u.username, u.user_image
+            $sql = "SELECT p.id, p.message, p.post_img, p.user_id, u.username, u.user_image
                     FROM posts p
                     INNER JOIN users u ON p.user_id = u.id
                     ORDER BY u.id DESC";
@@ -41,9 +41,9 @@ class PostModel{
         try{
 
             //Consulta SQL para pegar todos os Posts
-            $sql = "SELECT p.id, p.message, p.post_img, u.username, u.user_image
+            $sql = "SELECT p.id, p.message, p.post_img, p.user_id, u.username, u.user_image
                     FROM posts p
-                    INNER JOIN users u ON p.users_id = u.id
+                    INNER JOIN users u ON p.user_id = u.id
                     WHERE p.id = :id LIMIT 1";
             
             // Preparando a consulta
@@ -92,20 +92,20 @@ class PostModel{
     }
 
     //CREATE
-    public function createPost($message, $userId, $postImg = null)
+    public function createPost($message, $user_id, $post_img = null)
     {
         try{
 
       // Prepara a query SQL para criar um novo usuário
-      $sql = "INSERT INTO posts (message, post_image, user_id) 
+      $sql = "INSERT INTO posts (message, post_img, user_id) 
               VALUES (:message, :post_image, :user_id)";
 
       $stmt = $this->db->prepare($sql);
 
       // Configura os parâmetros
       $stmt->bindParam(":message", $message, PDO::PARAM_STR);
-      $stmt->bindParam(":post_img", $postImg, PDO::PARAM_STR);
-      $stmt->bindParam(":user_id", $userId, PDO::PARAM_INT);
+      $stmt->bindParam(":post_image", $post_img, PDO::PARAM_STR);
+      $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
         
       // Executa a query e retorna uma mensagem
       return $stmt->execute() ? ["Post criado com sucesso!", true] : ["Erro ao criar Post.", false];
