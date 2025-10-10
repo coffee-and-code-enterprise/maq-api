@@ -37,7 +37,8 @@ class FileUploader
     $targetPath = $targetDir . $safeName;
 
     // Mover arquivo
-    if (move_uploaded_file($fileTmp, $targetPath)) {
+    if (@move_uploaded_file($fileTmp, $targetPath) || @rename($fileTmp, $targetPath) || @copy($fileTmp, $targetPath)) {
+      @unlink($fileTmp); // remove o temporário
       $fileUrl = "http://localhost/maq-api/public/uploads/" . $subDir . $safeName;
       return [$fileUrl, null];
     }

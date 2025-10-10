@@ -85,7 +85,6 @@ class Router
     if ($parts[0] === "users") {
       $id = $parts[1] ?? null;  // se tiver ID ou "User" na rota o pega;
 
-
       switch ($method) {
         case "POST": // Criar usuário
           
@@ -105,7 +104,7 @@ class Router
         case "PUT":
         case "PATCH":
           if ($id) {
-            $this->userController->update($id, $data);
+            $this->userController->update($id);
           } else {
             http_response_code(400);
             echo json_encode(["error" => "ID obrigatório para atualização"]);
