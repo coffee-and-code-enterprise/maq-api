@@ -111,7 +111,7 @@ class UserModel
   }
 
   // UPDATE
-  public function updateUser($id, $data)
+  public function updateUser($id, $data, $user_image = null)
   {
     // Campos e parâmetros da consulta
     $fields = [];
@@ -138,9 +138,9 @@ class UserModel
       $params[':newPhone'] = $data->phone;
     }
     // Atualizar a foto de perfil
-    if (isset($data->userImg)) {
+    if (isset($user_image)) {
       $fields[] = "user_image = :newUserImage";
-      $params[':newUserImage'] = $data->userImg;
+      $params[':newUserImage'] = $user_image;
     }
     // Caso não tenha nenhum campo
     if (empty($fields)) {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07-Out-2025 às 18:17
+-- Tempo de geração: 09-Out-2025 às 19:04
 -- Versão do servidor: 10.4.6-MariaDB
 -- versão do PHP: 7.2.22
 
@@ -69,7 +69,8 @@ CREATE TABLE `posts` (
   `id` int(11) NOT NULL,
   `message` varchar(1000) NOT NULL,
   `post_img` varchar(255) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -113,6 +114,17 @@ CREATE TABLE `users` (
   `time_created` datetime NOT NULL DEFAULT current_timestamp(),
   `time_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `phone`, `username`, `password_hash`, `user_image`, `time_created`, `time_updated`) VALUES
+(4, 'guilherme@gmail.com', '+55 31 995389129', 'Guilherme', '$2y$10$37Nzcr0da7AsY6W7ZEElKuvUzULQRb4uOy75f604.Cxh/ryMAJ5C6', NULL, '2025-10-07 13:31:44', '2025-10-07 16:31:44'),
+(5, 'gujguh@gmail.com', '+55 31 956332987', 'Gustavo', '$2y$10$GtiBjxTsbxab4Mc3IRBXseGuwburuTgTbT02Jlwa5SCt1AC909Yfu', 'http://localhost/maq-api/public/uploads/user_images/pfp_68e5449b07fc64.76152284.png', '2025-10-07 13:47:25', '2025-10-07 16:49:31'),
+(6, 'johndoe@gmail.com', '', 'John', '$2y$10$sh4ClRXzezrU4GZV8kwRpOHPx40c7b9RiDlD0qASn50U.WDQQWSrC', NULL, '2025-10-07 14:12:48', '2025-10-07 17:12:48'),
+(16, '123@123', '123', '123', '$2y$10$WgoDImlRJQOirwuPLaprQeAxl.gMSTenMTRLnwdNg/IrxI.mlt64e', NULL, '2025-10-09 13:43:33', '2025-10-09 16:43:33'),
+(17, 'nietzche@gmail.com', NULL, 'albertCamus@gmail.com', '$2y$10$nvnMRlPSAU1z9DNZOWKQV.zV1qh8.y614h3aoapI7zICVewP0ABwm', NULL, '2025-10-09 13:52:13', '2025-10-09 16:52:13');
 
 --
 -- Índices para tabelas despejadas
@@ -183,7 +195,7 @@ ALTER TABLE `answers`
 -- AUTO_INCREMENT de tabela `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de tabela `topics`
@@ -195,7 +207,7 @@ ALTER TABLE `topics`
 -- AUTO_INCREMENT de tabela `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Restrições para despejos de tabelas

@@ -2,17 +2,21 @@
 require_once __DIR__ . "/../Models/UserModel.php";
 require_once __DIR__ . "/../Views/JsonView.php";
 require_once __DIR__ . '/../Middlewares/AuthMiddleware.php';
+require_once __DIR__ . '/../Helpers/FileUploader.php';
+require_once __DIR__ . '/../Helpers/RequestHelper.php';
 
 // Classe que controla o usuário. É responsável por fazer a ponte entre o model e a view
 class UserController
 {
   // Atributos privados da classe
   private $userModel;
+  private $fileUploader;
 
   // Método construtor. Cria o modelo do usuário
   public function __construct()
   {
     $this->userModel = new UserModel();
+    $this->fileUploader = new FileUploader();
   }
 
   // Método que retorna todos os usuários da tabela
@@ -23,7 +27,7 @@ class UserController
   }
 
   // Método que autentica o usuário
-   public function auth()
+  public function auth()
   {
     $userId = AuthMiddleware::handle();
 
@@ -72,9 +76,45 @@ class UserController
   }
 
   // Método que atualiza um usuário através do ID
-  public function update($id, $data)
+  public function update($id)
   {
-    $result = $this->userModel->updateUser($id, $data);
+    // Se for PUT, faz o parse manual do FormData
+    if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+      [$post, $files] = parsePutMultipartFormData();
+      $_POST = $post;
+      $_FILES = $files;
+    }
+
+    $data = json_decode(json_encode($_POST)) ?? null;
+    $file = $_FILES['image'] ?? null;
+
+    // Processamento do Upload de Arquivo (Se houver)
+    $user_image = null;
+
+    // Verifica se há um arquivo para upload
+    if (isset($file) && $file['error'] !== UPLOAD_ERR_NO_FILE) {
+
+      // Define o subdiretório. Ex: 'posts/' ou 'posts/' . $user_id
+      $subDir = 'user_images/';
+
+      [$fileUrl, $errors] = $this->fileUploader->upload($file, $subDir);
+
+      if ($fileUrl === null) {
+        // Se o upload falhar, retorna o erro
+        return JsonView::render([
+          "error" => "Falha no upload da imagem",
+          "details" => $errors,
+          "success" => false
+        ], 400);
+      }
+      // Se o upload for bem-sucedido, salva a URL da imagem
+      $user_image = $fileUrl;
+    }
+
+    // Aguarda o resultado da operação de update
+    $result = $this->userModel->updateUser($id, $data, $user_image);
+
+    // Retorna o resultado da operação
     JsonView::render(["message" => $result[0], "success" => $result[1]], 200);
     return;
   }
@@ -83,6 +123,13 @@ class UserController
   public function delete($id)
   {
     $result = $this->userModel->deleteUser($id);
-    JsonView::render(["message" => $result[0], "success" => $result[1]], 200);
+
+    if ($result[1] === true) {
+      $code = 200;
+    } else {
+      $code = 500;
+    }
+    
+    JsonView::render(["message" => $result[0], "success" => $result[1]], $code);
   }
 }
