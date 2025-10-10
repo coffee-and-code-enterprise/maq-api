@@ -119,8 +119,8 @@ class PostController
         if (!empty($post["post_img"])) {
             // A classe FileUploader.php espera o caminho relativo à pasta /public/uploads/
             // Precisamos extrair esse caminho da URL completa.
-            // Ex: "http://localhost/maq-api/public/uploads/posts/file_650b91d6438183.18129790.png"
-            // Path esperado: "posts/file_650b91d6438183.18129790.png"
+            // Ex: "http://localhost/maq-api/public/uploads/posts_images/file_650b91d6438183.18129790.png"
+            // Path esperado: "posts_images/file_650b91d6438183.18129790.png"
 
             // Simplificação: assume que a parte de interesse é após /public/uploads/
             $uploadPathSegment = '/public/uploads/';
