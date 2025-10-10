@@ -73,7 +73,7 @@ class PostController
         if (isset($file) && $file['error'] !== UPLOAD_ERR_NO_FILE) {
 
             // Define o subdiretório. Ex: 'posts/' ou 'posts/' . $user_id
-            $subDir = 'posts/';
+            $subDir = 'posts_images/';
 
             [$fileUrl, $errors] = $this->fileUploader->upload($file, $subDir);
 
