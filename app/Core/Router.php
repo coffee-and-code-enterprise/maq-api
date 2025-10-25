@@ -31,8 +31,8 @@ class Router
     // Separa as partes da uri por "/"
     $parts = explode("/", trim($uri, "/"));
 
-    // Se a primeira parte for "maq-api/public", remove ela antes de continuar o código
-    if ($parts[0] == 'maq-api') {
+    // Se a primeira parte for "maq-api.ct.ws/public", remove ela antes de continuar o código
+    if ($parts[0] == 'maq-api.ct.ws') {
       array_shift($parts);
     }
     if ($parts[0] == 'public') {
