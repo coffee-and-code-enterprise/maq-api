@@ -12,7 +12,7 @@ class JWT
   // Método construtor da classe
   public function __construct()
   {
-    $config = require __DIR__ . '/../../config/config.php'; // carrega as configs
+    $config = require __DIR__ . '/../../config/config.c.php'; // carrega as configs
     $this->tokenKey = $config['tokenKey'];
   }
 

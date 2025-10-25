@@ -11,7 +11,7 @@ class Database
   // Método construtor que adquire as credenciais do banco de dados
   public function __construct()
   {
-    $config = require __DIR__ . '/../../config/config.php'; // carrega as configs
+    $config = require __DIR__ . '/../../config/config.c.php'; // carrega as configs
     $this->host     = $config['host'];
     $this->database = $config['database'];
     $this->user     = $config['user'];
