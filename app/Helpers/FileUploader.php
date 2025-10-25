@@ -36,10 +36,20 @@ class FileUploader
     $safeName = uniqid('file_', true) . '.' . $fileExt;
     $targetPath = $targetDir . $safeName;
 
-    // Mover arquivo
-    if (@move_uploaded_file($fileTmp, $targetPath) || @rename($fileTmp, $targetPath) || @copy($fileTmp, $targetPath)) {
-      @unlink($fileTmp); // remove o temporário
-      $fileUrl = "https://maq-api.ct.ws/public/uploads/" . $subDir . $safeName;
+    // Mover arquivo (suporta também temp files criados manualmente)
+    $moved = false;
+    if (is_uploaded_file($fileTmp)) {
+      $moved = move_uploaded_file($fileTmp, $targetPath);
+    } else {
+      $moved = @rename($fileTmp, $targetPath) || @copy($fileTmp, $targetPath);
+      if ($moved) @unlink($fileTmp);
+    }
+
+    if ($moved) {
+      // usa BASE_URL do config (que lê env)
+      $config = require __DIR__ . '/../../config/config.php';
+      $baseUrl = rtrim($config['base_url'] ?? 'http://localhost/maq-api/public/uploads/', '/');
+      $fileUrl = $baseUrl . '/' . trim($subDir, '/') . '/' . $safeName;
       return [$fileUrl, null];
     }
 

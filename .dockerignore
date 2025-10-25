@@ -1,0 +1,7 @@
+/vendor
+/node_modules
+/.git
+/public/uploads
+/.env
+config/*.php
+*.log

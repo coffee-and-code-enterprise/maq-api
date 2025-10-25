@@ -1,0 +1,9 @@
+services:
+- type: web
+  name: make-a-question-api
+  env: docker
+  dockerfilePath: Dockerfile
+  plan: starter
+  region: oregon
+  autoDeploy: true
+  port: 8080
