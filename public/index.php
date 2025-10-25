@@ -9,7 +9,7 @@ require_once __DIR__ . "/../app/Core/Router.php";  // Importando o Router para p
 
 // Configurando o CORS
 $allowedOrigins = [
-  'https://make-a-question-tau.vercel.app/',  // Endereço do servidor front-end
+  'https://makeaquestion.vercel.app',  // Endereço do servidor front-end
   // Se necessário, adicionarei mais domínios aqui
 ];
 
